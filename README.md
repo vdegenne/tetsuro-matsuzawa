@@ -6,7 +6,7 @@ Small application embedding a custom element simulating the memory program used 
   <img src="./presentation.gif">
 </p>
 
-## installation
+## Installation
 
 Clone the repo then install the deps
 
@@ -14,14 +14,7 @@ Clone the repo then install the deps
 npm i
 ```
 
-Create a symlink to the node_modules directory in public
-
-```bash
-cd public
-ln -s ../node_modules node_modules
-```
-
-## serve
+## Run
 
 Install `pm2` then
 
