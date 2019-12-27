@@ -14,7 +14,7 @@ Clone the repo then install the deps
 npm i
 ```
 
-## Run
+## Serve
 
 Install `pm2` then
 
@@ -25,3 +25,7 @@ pm2 start pm2.config.js
 ### production
 
 Use `npm run watch` instead of `pm2` method if you want to modify the code and refresh the page on code change.
+
+## Usage
+
+Finally visit `http://localhost:43789/` to use the app.
