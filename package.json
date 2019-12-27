@@ -1,0 +1,20 @@
+{
+  "name": "tetsuro-matsuzawa",
+  "version": "1.0.0",
+  "scripts": {
+    "watch": "es-dev-server --node-resolve -r public --babel --file-extensions .ts --preserve-symlinks --watch --open"
+  },
+  "author": "Valentin DEGENNE",
+  "license": "ISC",
+  "dependencies": {
+    "@material/mwc-button": "^0.12.0",
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.7"
+  }
+}
