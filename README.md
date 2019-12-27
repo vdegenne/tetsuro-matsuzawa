@@ -2,9 +2,9 @@
 
 Small application embedding a custom element simulating the memory program used by Tetsuro Matsuzawa in his cognitive tradeoff hypothesis.
 
-<center>
+<p align="center">
   <img src="./presentation.gif">
-</center>
+</p>
 
 ## installation
 
