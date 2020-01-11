@@ -45,7 +45,7 @@ export class MemoryElement extends LitElement {
         cursor: pointer;
         text-indent: 9999px;
         overflow: hidden;
-        transition: background .1s linear;
+        /* transition: background .1s linear; */
       }
       .case:hover {
         background: rgba(200, 200, 200, .3);

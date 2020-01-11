@@ -11,6 +11,8 @@ export class AppContainer extends LitElement {
     display: block;
     font-family: Roboto;
     text-align: center;
+
+    --mdc-theme-primary: black;
   }
   memory-element {
     width: 300px;
@@ -24,9 +26,17 @@ export class AppContainer extends LitElement {
 
 
   render () {
+    const multiplication_a = Math.floor(Math.random() * 9) + 1
+    const multiplication_b = Math.floor(Math.random() * 9) + 1
+
     return html`
-    <memory-element width=5 height=5 nofn=8></memory-element>
-    <mwc-button unelevated @click="${this.startANew}">new</mwc-button>
+    <memory-element width=5 height=5 nofn=7></memory-element>
+    <mwc-button raised @click="${this.startANew}">new</mwc-button>
+
+    <div style="margin: 70px 0 30px 0;">
+      <h2 title="${multiplication_a*multiplication_b}">${multiplication_a} x ${multiplication_b}</h2>
+      <mwc-button raised @click="${() => this.requestUpdate()}">update</mwc-button>
+    </div>
     `
   }
 
