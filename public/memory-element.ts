@@ -1,117 +1,130 @@
-import {LitElement, html, customElement, property, query} from 'lit-element'
-import {nothing} from 'lit-html'
+import {css, customElement, html, LitElement, property, queryAll} from 'lit-element';
+
+export declare type BoardMode = 'toggle' | 'oneClick' | 'locked';
 
 @customElement('memory-element')
 export class MemoryElement extends LitElement {
+  /** Width of the board */
+  @property({type: Number}) protected width = 5;
+  /** Height of the board */
+  @property({type: Number}) protected height = 5;
+  /** Number of numbers */
+  @property({type: Number}) non = 4;
+  /** The current board mode */
+  protected boardMode: BoardMode = 'toggle';
+  /** prevent clicking on the tiles */
+  protected boardLocked = true;
 
-  @property({ type: Number })
-  width = 10
+  @queryAll('.tile') protected tiles: HTMLDivElement[];
 
-  @property({ type: Number })
-  height = 10.
+  protected render() {
+    // Redrawing resets the game
 
-  @property({ type: Number })
-  nofn = 4 // number of numbers
+    // hide the tiles
+    this.hideAllTiles();
 
-  @property({ attribute: false })
-  state = 'normal'
+    // pick random numbers
+    if (this.non > this.width * this.height) {
+      console.error('the number of numbers is superior to the board dimension');
+      return null;
+    }
+    const randoms: number[] = [];
+    while (randoms.length < this.non) {
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * this.width * this.height) + 1;
+      } while (randoms.indexOf(rand) >= 0);
+      randoms.push(rand);
+    }
 
-  private _track = 1
-
-  // cases
-  get cases () {
-    return [...this.shadowRoot!.querySelectorAll('.case')]
-  }
-
-  public render () {
     return html`
     <style>
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        ${this.state === 'normal' ? html`background: black` : nothing};
-        ${this.state === 'failure' ? html`background: red` : nothing};
-        ${this.state === 'success' ? html`background: #4caf50` : nothing};
-      }
-      .case {
-        /* background: black; */
-        color: white;
-        width: calc(100% / ${this.width});
-        height: calc(100% / ${this.height});
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        text-indent: 9999px;
-        overflow: hidden;
-        /* transition: background .1s linear; */
-      }
-      .case:hover {
-        background: rgba(200, 200, 200, .3);
-      }
-
-      .revealed {
-        text-indent: 0px;
-      }
+    :host {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: black;
+      border-radius: 5px;
+    }
+    .tile {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: calc(100% / ${this.width});
+      height: calc(100% / ${this.height});
+      background-color: black; 
+      color: transparent;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 5px;
+    }
+    .tile:hover {
+      background-color: #9e9e9e61;
+    }
+    .tile[show] {
+      color: white;
+    }
+    .tile[red] {
+      color: red !important;
+    }
     </style>
-    ${[...Array(this.width * this.height)].map((_, i) => {
-      return html`<div class="case revealed" @click="${this.revealCase}"></div>`
-    })}
-    `
+    ${[...Array(this.width * this.height)].map((v, i) => {
+      const randomIndex = randoms.indexOf(i + 1);
+      return html`
+      <div class="tile"
+          @click="${this.onTileClick}">
+        ${randomIndex >= 0 ? randomIndex + 1 : ''}
+      </div>
+      `;
+    })} 
+    `;
   }
 
-  clearCases () {
-    this.cases.forEach(c => c.textContent = '')
+  protected updated() {
+    // this.showAllTiles();
   }
 
-  reset() {
-    this.state = 'normal'
-    this._track = 1
-    this.placeNumbers()
-  }
-
-  placeNumbers() {
-    this.clearCases()
-
-    const cases = this.cases
-
-    let i = 0
-    while (i++ < this.nofn) {
-      // pick a case
-      let c
-      do {
-        c = Math.floor(Math.random() * (this.width * this.height))
-      } while (cases[c].textContent !== '')
-      cases[c].textContent = `${i}`
-    }
-  }
-
-  hideNumbers() {
-    this.cases.forEach(c => c.classList.remove('revealed'))
-  }
-
-  showNumbers(duration = 2) {
-    this.cases.forEach(c => c.classList.add('revealed'))
-    if (duration) {
-      setTimeout(() => this.hideNumbers(), duration * 1000)
-    }
-  }
-
-  revealCase (e: Event) {
-    const c = e.target as HTMLElement
-    c.classList.add('revealed')
-    if (!c.textContent) {
-      return
-    }
-    if (parseInt(c.textContent) !== this._track) {
-      this.state = 'failure'
-    }
-    else {
-      this._track += 1
-      if (this._track > this.nofn) {
-        this.state = 'success'
+  protected onTileClick(e: MouseEvent) {
+    const el = e.target as HTMLDivElement;
+    if (this.boardMode === 'locked') {
+      // do nothing
+    } else if (this.boardMode === 'oneClick') {
+      if (!el.hasAttribute('show')) {
+        el.setAttribute('show', '');
       }
+    } else if (this.boardMode === 'toggle') {
+      el[el.hasAttribute('show') ? 'removeAttribute' : 'setAttribute'](
+          'show', '');
     }
+
+    const number =
+        parseInt((e.target as HTMLDivElement).textContent!.trim()) || null;
+
+    this.dispatchEvent(new CustomEvent('tileClick', {
+      detail: {
+        tile: e.target,
+        number,
+      }
+    }));
+  }
+
+  public async showAllTiles() {
+    await this.updateComplete;
+    this.tiles.forEach(tile => {
+      tile.setAttribute('show', '');
+    });
+  }
+  public hideAllTiles() {
+    this.tiles.forEach(tile => {
+      tile.removeAttribute('show');
+      tile.removeAttribute('red');
+    });
+  }
+
+  public redColorizeHiddenTiles() {
+    this.tiles.forEach(tile => {
+      if (!tile.hasAttribute('show')) {
+        tile.setAttribute('red', '');
+      }
+    })
   }
 }

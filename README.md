@@ -1,6 +1,6 @@
 # Tetsuro Matsuzawa
 
-Small application embedding a custom element simulating the memory program used by Tetsuro Matsuzawa in his cognitive tradeoff hypothesis.
+Small application/game embedding a custom element simulating the memory program used by Tetsuro Matsuzawa in his cognitive tradeoff hypothesis.
 
 <p align="center">
   <img src="./presentation.gif">
@@ -11,7 +11,7 @@ Small application embedding a custom element simulating the memory program used 
 Clone the repo then install the deps
 
 ```bash
-npm i
+yarn install
 ```
 
 ## Serve
