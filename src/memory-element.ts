@@ -40,10 +40,11 @@ export class MemoryElement extends LitElement {
     return html`
     <style>
     :host {
-      display: flex;
+      display: inline-flex;
       flex-wrap: wrap;
       background-color: black;
-      border-radius: 5px;
+      /* border-radius: 5px; */
+      font-size: 24px;
     }
     .tile {
       display: flex;
@@ -55,7 +56,8 @@ export class MemoryElement extends LitElement {
       color: transparent;
       cursor: pointer;
       user-select: none;
-      border-radius: 5px;
+      /* border-radius: 5px; */
+      transition: background-color .1s linear;
     }
     .tile:hover {
       background-color: #9e9e9e61;
@@ -64,7 +66,7 @@ export class MemoryElement extends LitElement {
       color: white;
     }
     .tile[red] {
-      color: red !important;
+      color: #f44336 !important;
     }
     </style>
     ${[...Array(this.width * this.height)].map((v, i) => {
