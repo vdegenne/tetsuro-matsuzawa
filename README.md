@@ -1,5 +1,7 @@
 # Tetsuro Matsuzawa
 
+<img src="./primate-memory.jpg" alt="we are just monkeys" width=256>
+
 Small application/game embedding a custom element simulating the memory program used by Tetsuro Matsuzawa in his cognitive tradeoff hypothesis.
 
 <p align="center">
